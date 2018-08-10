@@ -19,16 +19,7 @@ int HpoModel::columnCount(const QModelIndex &parent) const
 int HpoModel::rowCount(const QModelIndex &parent) const
 {
     Node * parentNode;
-
-    if (!parent.isValid())
-        parentNode = mRootNode;
-    else
-        parentNode = static_cast<Node*>(parent.internalPointer());
-
-    return parentNode->childCount();
-
-
-
+    return nodeFromIndex(parent)->childCount();
 }
 
 QModelIndex HpoModel::index(int row, int column, const QModelIndex &parent) const
@@ -37,16 +28,13 @@ QModelIndex HpoModel::index(int row, int column, const QModelIndex &parent) cons
     if (!hasIndex(row, column, parent))
         return QModelIndex();
 
-    Node *parentItem;
+    Node * parentNode;
 
-    if (!parent.isValid())
-        parentItem = mRootNode;
-    else
-        parentItem = static_cast<Node*>(parent.internalPointer());
+    parentNode = nodeFromIndex(parent);
 
-    Node *childItem = parentItem->child(row);
-    if (childItem)
-        return createIndex(row, column, childItem);
+    Node * node = parentNode->child(row);
+    if (node)
+        return createIndex(row, column, node);
     else
         return QModelIndex();
 }
@@ -56,14 +44,13 @@ QModelIndex HpoModel::parent(const QModelIndex &index) const
     if (!index.isValid())
         return QModelIndex();
 
-    Node *childItem = static_cast<Node*>(index.internalPointer());
-    Node *parentItem = childItem->parent();
+    Node * node      = static_cast<Node*>(index.internalPointer());
+    Node *parentNode = node->parent();
 
-
-    if (parentItem == mRootNode)
+    if (parentNode == mRootNode)
         return QModelIndex();
 
-    return createIndex(parentItem->row(), 0, parentItem);
+    return createIndex(parentNode->row(), 0, parentNode);
 }
 
 QVariant HpoModel::data(const QModelIndex &index, int role) const
@@ -73,7 +60,7 @@ QVariant HpoModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
 
-    Node * node = static_cast<Node*>(index.internalPointer());
+    Node * node = nodeFromIndex(index);
 
     if (role == Qt::DisplayRole)
     {
@@ -133,7 +120,7 @@ bool HpoModel::canFetchMore(const QModelIndex &index) const
         return false;
 
 
-    Node * node = static_cast<Node*>(index.internalPointer());
+    Node * node = nodeFromIndex(index);
 
     if (node->hasChildren() && node->childCount() == 0)
         return true;
@@ -148,11 +135,7 @@ void HpoModel::fetchMore(const QModelIndex &parent)
 
     qDebug()<<"fetch mode " <<parent;
 
-    Node * node ;
-    if (parent == QModelIndex())
-        node = mRootNode;
-    else
-        node = static_cast<Node*>(parent.internalPointer());
+    Node * node = nodeFromIndex(parent);
 
     int count = node->fetchCount();
 
@@ -168,15 +151,8 @@ void HpoModel::fetchMore(const QModelIndex &parent)
 
 bool HpoModel::hasChildren(const QModelIndex &parent) const
 {
-
-    if (parent == QModelIndex())
-        return mRootNode->hasChildren();
-
-
-    Node * node = static_cast<Node*>(parent.internalPointer());
-
+    Node * node = nodeFromIndex(parent);
     return node->hasChildren();
-
 }
 
 Qt::ItemFlags HpoModel::flags(const QModelIndex &index) const
