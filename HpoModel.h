@@ -28,6 +28,11 @@ public:
 
      bool hasChildren(const QModelIndex &parent = QModelIndex()) const;
 
+    Qt::ItemFlags flags(const QModelIndex &index) const override;
+
+
+    Node * nodeFromIndex(const QModelIndex& index) const;
+
 
 private:
     QSqlDatabase mDb;

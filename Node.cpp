@@ -1,10 +1,27 @@
 #include "Node.h"
 
-Node::Node(int nodeId, Node *parent)
+Node::Node(int id, Node * parent)
     :mParent(parent)
 {
+    qDebug()<<"const";
 
-    setNodeId(nodeId);
+    setNodeId(id);
+}
+
+Node::Node(const QString &hpo, Node *parent)
+    :mParent(parent)
+{
+    // this is the first node "all"
+    if (hpo.isEmpty())
+        setNodeId(1);
+
+    quint32 id = idFromTerm(hpo);
+
+    qDebug()<<"ID "<<id;
+    if (!id)
+        setNodeId(1);
+
+    setNodeId(id);
 
 }
 
@@ -28,13 +45,18 @@ int Node::childCount() const
     return mChilds.count();
 }
 
+int Node::fetchCount() const
+{
+    return qAbs(right() - left()) / 2;
+}
+
 
 
 int Node::row() const
 {
 
-   if (mParent)
-      mParent->mChilds.indexOf(const_cast<Node*>(this));
+    if (mParent)
+        mParent->mChilds.indexOf(const_cast<Node*>(this));
 
     return 0;
 }
@@ -72,16 +94,16 @@ void Node::setNodeId(int nodeId)
 
 
     // can fetch more
-//    q = QString("SELECT COUNT(*) FROM nodes WHERE nodes.left > %1 AND nodes.right < %2 AND depth == %3").arg(mLeft).arg(mRight).arg(mDepth+1);
+    //    q = QString("SELECT COUNT(*) FROM nodes WHERE nodes.left > %1 AND nodes.right < %2 AND depth == %3").arg(mLeft).arg(mRight).arg(mDepth+1);
 
-//    query.exec(q);
+    //    query.exec(q);
 
-//    if (query.next())
-//    {
-//       mFetchChildCount =  query.record().value(0).toInt();
+    //    if (query.next())
+    //    {
+    //       mFetchChildCount =  query.record().value(0).toInt();
 
 
-//    }
+    //    }
 
 }
 
@@ -106,8 +128,8 @@ void Node::loadChild()
 
     while (query.next())
     {
-       int nodeId = query.record().value(0).toInt();
-       addChild(new Node(nodeId,this));
+        int nodeId = query.record().value(0).toInt();
+        addChild(new Node(nodeId,this));
 
     }
 
@@ -118,3 +140,44 @@ bool Node::hasChildren()
     int diff = qAbs(mLeft - mRight);
     return qAbs(mLeft - mRight) > 1;
 }
+
+quint32 Node::idFromTerm(const QString &term)
+{
+    QString q = QString("SELECT nodes.id FROM terms, nodes WHERE terms.hpo = '%1' AND nodes.term_id = nodes.id ").arg(term);
+    QSqlQuery query(q);
+
+    if (query.next())
+    {
+        return query.record().value(0).toInt();
+    }
+
+    qDebug()<<query.lastQuery();
+    return 0;
+
+}
+
+QList<Node *> Node::createNode(const QString &term)
+{
+
+}
+
+QString Node::hpo() const
+{
+    return mHpo;
+}
+
+int Node::depth() const
+{
+    return mDepth;
+}
+
+int Node::right() const
+{
+    return mRight;
+}
+
+int Node::left() const
+{
+    return mLeft;
+}
+

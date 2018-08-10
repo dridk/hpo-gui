@@ -3,10 +3,6 @@
 HpoModel::HpoModel(QObject *parent)
     :QAbstractItemModel(parent)
 {
-
-
-
-
 }
 
 HpoModel::~HpoModel()
@@ -23,7 +19,6 @@ int HpoModel::columnCount(const QModelIndex &parent) const
 int HpoModel::rowCount(const QModelIndex &parent) const
 {
     Node * parentNode;
-
 
     if (!parent.isValid())
         parentNode = mRootNode;
@@ -77,8 +72,6 @@ QVariant HpoModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole)
-        return QVariant();
 
     Node * node = static_cast<Node*>(index.internalPointer());
 
@@ -86,15 +79,15 @@ QVariant HpoModel::data(const QModelIndex &index, int role) const
     {
 
         if (index.column() == 0)
-            return node->mHpo;
+            return node->hpo();
 
 
         if (index.column() == 1)
-            return node->mName;
+            return node->name();
 
     }
 
-    if (role == Qt::CheckStateRole)
+    if (role == Qt::CheckStateRole && index.column() == 0)
         return Qt::Unchecked;
 
 
@@ -117,18 +110,12 @@ void HpoModel::setDatabase(const QString &database)
 
 
 
-    mRootNode = new Node(1);
+    mRootNode = new Node("HP:0012823");
 
 
     mRootNode->loadChild();
 
-    qDebug()<<mRootNode->childCount();
 
-    mRootNode->child(0)->loadChild();
-
-    mRootNode->child(0)->child(0)->loadChild();
-
-    qDebug()<<mRootNode->child(0)->child(0)->childCount();
 
     // mRootNode->child(0)->loadChild();
     //    mRootNode->child(0)->child(0)->loadChild();
@@ -167,7 +154,7 @@ void HpoModel::fetchMore(const QModelIndex &parent)
     else
         node = static_cast<Node*>(parent.internalPointer());
 
-    int count = (node->mRight - node->mLeft)/2;
+    int count = node->fetchCount();
 
     beginInsertRows(parent,0, count);
 
@@ -190,6 +177,19 @@ bool HpoModel::hasChildren(const QModelIndex &parent) const
 
     return node->hasChildren();
 
+}
+
+Qt::ItemFlags HpoModel::flags(const QModelIndex &index) const
+{
+
+    return Qt::ItemIsSelectable|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled;
+}
+
+Node *HpoModel::nodeFromIndex(const QModelIndex &index) const
+{
+    if (index == QModelIndex())
+        return mRootNode;
+    return static_cast<Node*>(index.internalPointer());
 }
 
 //bool HpoModel::canFetchMore(const QModelIndex &index) const

@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mModel->setDatabase("/data/hpo.db");
 
 
+
     ui->treeView->setModel(mModel);
 
 }
