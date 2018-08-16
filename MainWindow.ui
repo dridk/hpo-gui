@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>916</width>
-    <height>560</height>
+    <width>1071</width>
+    <height>646</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,8 +20,8 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout">
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <widget class="QLineEdit" name="lineEdit"/>
         </item>
@@ -30,10 +30,14 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout_2">
+      <widget class="QWidget" name="">
+       <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QLineEdit" name="lineEdit_2"/>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLineEdit" name="lineEdit_2"/>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QTabWidget" name="tabWidget">
@@ -43,7 +47,17 @@
            </attribute>
            <layout class="QVBoxLayout" name="verticalLayout_4">
             <item>
-             <widget class="QListView" name="geneView"/>
+             <widget class="QTableView" name="geneView">
+              <property name="sortingEnabled">
+               <bool>true</bool>
+              </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
+              <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+               <bool>true</bool>
+              </attribute>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -65,7 +79,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>916</width>
+     <width>1071</width>
      <height>23</height>
     </rect>
    </property>
@@ -83,4 +97,7 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>

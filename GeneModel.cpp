@@ -12,7 +12,7 @@ int GeneModel::rowCount(const QModelIndex &parent) const
 
 int GeneModel::columnCount(const QModelIndex &parent) const
 {
-    return 1;
+    return 2;
 }
 
 QVariant GeneModel::data(const QModelIndex &index, int role) const
@@ -20,22 +20,54 @@ QVariant GeneModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole){
+
+        if (index.column() == 0)
         return mGenes.at(index.row()).name;
+
+        if (index.column() == 1)
+            return mGenes.at(index.row()).occurance;
+
+    }
 
 
     return QVariant();
 }
 
+void GeneModel::sort(int column, Qt::SortOrder order)
+{
+
+    beginResetModel();
+
+    qSort(mGenes.begin(), mGenes.end(), [this, column, order](const Gene& a, const Gene& b)
+    {
+
+        bool res;
+
+        if (column == 0)
+            res = (a.name > b.name);
+
+        else
+            res = (a.occurance > b.occurance);
+
+        return order ? res : !res;
+
+
+    });
+
+    endResetModel();
+
+}
+
 void GeneModel::load(const QString &hpolist)
 {
 
-    QHash< QString, QSet<QString>> setList;
+   QHash<QString, Gene> list;
 
-    for (QString hpo : hpolist.split(" "))
+   QStringList hpos = hpolist.split(" ");
+
+    for (QString hpo : hpos)
     {
-
-        setList[hpo] = QSet<QString>();
 
         QSqlQuery query(QString("SELECT genes.* FROM term_has_genes, genes , terms WHERE term_has_genes.gene_id = genes.id AND term_has_genes.term_id = terms.id "
                                 "AND terms.hpo = '%1'"
@@ -44,34 +76,28 @@ void GeneModel::load(const QString &hpolist)
         while (query.next())
         {
 
-            setList[hpo].insert(query.record().value("name").toString());
+            QString geneName = query.record().value("name").toString();
+
+            if (!list.contains(geneName)){
+                list[geneName].name = geneName;
+                list[geneName].occurance = 1;
+                list[geneName].total = hpos.size();
+            }
+
+            else
+                list[geneName].occurance ++ ;
 
         }
-
-//        qDebug()<<query.lastError();
-//        qDebug()<<query.lastQuery();
-
-        qDebug()<<"HPO "<<hpo<<setList[hpo];
 
     }
 
 
-// EXEMPLE :   HP:0000581 HP:0000537 ptosis et blepharophimosis situs invertus ==>
-    QSet<QString> all  = setList[setList.keys().first()];
-
-    for (const QString& hpo : setList.keys())
-        all.intersect(setList[hpo]);
-
-
     beginResetModel();
-    mGenes.clear();
+    // EXEMPLE :   HP:0000581 HP:0000537 ptosis et blepharophimosis situs invertus ==>
 
-    for (const QString& gene : all)
-        mGenes.append({gene,"", 3,3});
 
+    mGenes = list.values();
 
     endResetModel();
-
-
 
 }
