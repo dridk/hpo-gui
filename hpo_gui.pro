@@ -28,13 +28,17 @@ SOURCES += \
         MainWindow.cpp \
     HpoModel.cpp \
     Node.cpp \
-    GeneModel.cpp
+    GeneModel.cpp \
+    flowlayout.cpp \
+    TagWidget.cpp
 
 HEADERS += \
         MainWindow.h \
     HpoModel.h \
     Node.h \
-    GeneModel.h
+    GeneModel.h \
+    flowlayout.h \
+    TagWidget.h
 
 FORMS += \
         MainWindow.ui
