@@ -1,7 +1,9 @@
 #ifndef TAGWIDGET_H
 #define TAGWIDGET_H
-#include <QWidget>
+#include <QtWidgets>
 #include <QPainter>
+#include "qfonticon/qfonticon.h"
+
 class TagWidget : public QWidget
 {
     Q_OBJECT
@@ -15,10 +17,17 @@ protected:
 
         QSize wordSize() const;
 
+        void mouseMoveEvent(QMouseEvent * event);
+        void mousePressEvent(QMouseEvent * event);
+        void enterEvent(QEvent * event);
+        void leaveEvent(QEvent *event);
+
 
 private:
     QString mWord;
     QFont mFont;
+
+    bool mHover = false;
 
 
 };

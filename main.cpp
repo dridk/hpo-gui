@@ -4,6 +4,8 @@
 #include "flowlayout.h"
 #include <QtWidgets>
 #include "TagWidget.h"
+#include "qfonticon/qfonticon.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -11,10 +13,14 @@ int main(int argc, char *argv[])
 //    w.show();
 
 
+    QFontIcon::addFont(":/materialdesignicons-webfont.ttf");
+
     QWidget * w = new QWidget;
     FlowLayout * l = new FlowLayout;
 
-    l->addWidget(new TagWidget("salut"));
+    w->setStyleSheet("background-color:white;");
+
+    l->addWidget(new TagWidget("HPO:424242"));
 
     l->addWidget(new TagWidget("salut"));
 
