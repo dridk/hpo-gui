@@ -83,7 +83,6 @@ QVariant HpoModel::data(const QModelIndex &index, int role) const
 
 void HpoModel::setDatabase(const QString &database)
 {
-    beginResetModel();
 
     mDb = QSqlDatabase::addDatabase("QSQLITE");
     mDb.setDatabaseName(database);
@@ -96,20 +95,9 @@ void HpoModel::setDatabase(const QString &database)
 
 
 
-
-    mRootNode = new Node("HP:0012823");
-
-
-    mRootNode->loadChild();
+    load();
 
 
-
-    // mRootNode->child(0)->loadChild();
-    //    mRootNode->child(0)->child(0)->loadChild();
-
-
-
-    endResetModel();
 
 
 }
@@ -166,6 +154,33 @@ Node *HpoModel::nodeFromIndex(const QModelIndex &index) const
     if (index == QModelIndex())
         return mRootNode;
     return static_cast<Node*>(index.internalPointer());
+}
+
+void HpoModel::load(const QString &search)
+{
+
+    beginResetModel();
+
+    if (mRootNode)
+        delete mRootNode;
+
+    mRootNode = new Node();
+
+
+    // load All
+    if (search.isEmpty())
+        mRootNode->addChild(new Node(1));
+
+    // load only with search terms
+    else {
+        for (Node * node : Node::createNode(search))
+            mRootNode->addChild(node);
+    }
+
+    endResetModel();
+
+
+
 }
 
 //bool HpoModel::canFetchMore(const QModelIndex &index) const

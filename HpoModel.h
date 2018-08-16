@@ -34,6 +34,10 @@ public:
     Node * nodeFromIndex(const QModelIndex& index) const;
 
 
+public Q_SLOTS:
+    void load(const QString& search = QString());
+
+
 private:
     QSqlDatabase mDb;
 

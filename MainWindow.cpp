@@ -14,6 +14,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     ui->treeView->setModel(mModel);
+   // ui->treeView->header()->setSectionResizeMode(0,QHeaderView::ResizeToContents);
+
+
+    connect(ui->lineEdit, &QLineEdit::returnPressed, [this](){
+
+        mModel->load(ui->lineEdit->text());
+
+    });
 
 }
 
