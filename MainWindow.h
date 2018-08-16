@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "HpoModel.h"
+#include "GeneModel.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,6 +21,7 @@ private:
     Ui::MainWindow *ui;
 
     HpoModel * mModel;
+    GeneModel * mGeneModel;
 };
 
 #endif // MAINWINDOW_H

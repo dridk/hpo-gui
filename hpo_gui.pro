@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         MainWindow.cpp \
     HpoModel.cpp \
-    Node.cpp
+    Node.cpp \
+    GeneModel.cpp
 
 HEADERS += \
         MainWindow.h \
     HpoModel.h \
-    Node.h
+    Node.h \
+    GeneModel.h
 
 FORMS += \
         MainWindow.ui

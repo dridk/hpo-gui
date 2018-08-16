@@ -74,8 +74,8 @@ QVariant HpoModel::data(const QModelIndex &index, int role) const
 
     }
 
-    if (role == Qt::CheckStateRole && index.column() == 0)
-        return Qt::Unchecked;
+//    if (role == Qt::CheckStateRole && index.column() == 0)
+//        return Qt::Unchecked;
 
 
     return QVariant();
@@ -146,7 +146,7 @@ bool HpoModel::hasChildren(const QModelIndex &parent) const
 Qt::ItemFlags HpoModel::flags(const QModelIndex &index) const
 {
 
-    return Qt::ItemIsSelectable|Qt::ItemIsUserCheckable|Qt::ItemIsEnabled;
+    return Qt::ItemIsSelectable|Qt::ItemIsEnabled;
 }
 
 Node *HpoModel::nodeFromIndex(const QModelIndex &index) const
