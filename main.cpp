@@ -1,9 +1,9 @@
-#include "MainWindow.h"
+#include "mainwindow.h"
 #include <QApplication>
 
 #include "flowlayout.h"
 #include <QtWidgets>
-#include "TagWidget.h"
+#include "tagitem.h"
 #include "qfonticon/qfonticon.h"
 
 int main(int argc, char *argv[])
@@ -20,9 +20,9 @@ int main(int argc, char *argv[])
 
     w->setStyleSheet("background-color:white;");
 
-    l->addWidget(new TagWidget("HPO:424242"));
+    l->addWidget(new TagItem("HPO:424242"));
 
-    l->addWidget(new TagWidget("salut"));
+    l->addWidget(new TagItem("salut"));
 
     w->setLayout(l);
 

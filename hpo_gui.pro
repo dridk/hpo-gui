@@ -26,20 +26,22 @@ include("qfonticon/qfonticon.pri")
 
 SOURCES += \
         main.cpp \
-        MainWindow.cpp \
-    HpoModel.cpp \
-    Node.cpp \
-    GeneModel.cpp \
     flowlayout.cpp \
-    TagWidget.cpp
+    tagitem.cpp \
+    tagedit.cpp \
+    node.cpp \
+    mainwindow.cpp \
+    hpomodel.cpp \
+    genemodel.cpp
 
 HEADERS += \
-        MainWindow.h \
-    HpoModel.h \
-    Node.h \
-    GeneModel.h \
     flowlayout.h \
-    TagWidget.h
+    tagitem.h \
+    tagedit.h \
+    node.h \
+    mainwindow.h \
+    hpomodel.h \
+    genemodel.h
 
 FORMS += \
         MainWindow.ui

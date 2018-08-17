@@ -4,11 +4,11 @@
 #include <QPainter>
 #include "qfonticon/qfonticon.h"
 
-class TagWidget : public QWidget
+class TagItem : public QWidget
 {
     Q_OBJECT
 public:
-    explicit TagWidget(const QString& word, QWidget *parent = nullptr);
+    explicit TagItem(const QString& word, QWidget *parent = nullptr);
 
 
 protected:

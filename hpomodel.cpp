@@ -1,4 +1,4 @@
-#include "HpoModel.h"
+#include "hpomodel.h"
 
 HpoModel::HpoModel(QObject *parent)
     :QAbstractItemModel(parent)

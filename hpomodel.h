@@ -2,7 +2,7 @@
 #define HPOMODEL_H
 #include <QAbstractItemModel>
 #include <QtSql>
-#include "Node.h"
+#include "node.h"
 
 class HpoModel : public QAbstractItemModel
 {

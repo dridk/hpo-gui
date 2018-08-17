@@ -1,4 +1,4 @@
-#include "GeneModel.h"
+#include "genemodel.h"
 
 GeneModel::GeneModel(QObject *parent)
 {

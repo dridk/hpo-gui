@@ -1,6 +1,6 @@
-#include "TagWidget.h"
+#include "tagitem.h"
 
-TagWidget::TagWidget(const QString &word, QWidget *parent) :
+TagItem::TagItem(const QString &word, QWidget *parent) :
     mWord(word),QWidget(parent)
 {
 
@@ -13,7 +13,7 @@ TagWidget::TagWidget(const QString &word, QWidget *parent) :
 
 }
 
-void TagWidget::paintEvent(QPaintEvent *event)
+void TagItem::paintEvent(QPaintEvent *event)
 {
 
     QPainter painter(this);
@@ -46,12 +46,12 @@ void TagWidget::paintEvent(QPaintEvent *event)
     QWidget::paintEvent(event);
 }
 
-QSize TagWidget::sizeHint() const
+QSize TagItem::sizeHint() const
 {
     return wordSize() + QSize(40,15);
 }
 
-QSize TagWidget::wordSize() const
+QSize TagItem::wordSize() const
 {
     QFontMetrics metrics(mFont);
 
@@ -59,13 +59,13 @@ QSize TagWidget::wordSize() const
 
 }
 
-void TagWidget::mouseMoveEvent(QMouseEvent *event)
+void TagItem::mouseMoveEvent(QMouseEvent *event)
 {
 
     QWidget::mouseMoveEvent(event);
 }
 
-void TagWidget::mousePressEvent(QMouseEvent *event)
+void TagItem::mousePressEvent(QMouseEvent *event)
 {
     if (event->pos().x() > rect().width() - 20 )
         qDebug()<<"close";
@@ -74,14 +74,14 @@ void TagWidget::mousePressEvent(QMouseEvent *event)
     QWidget::mousePressEvent(event);
 }
 
-void TagWidget::enterEvent(QEvent *event)
+void TagItem::enterEvent(QEvent *event)
 {
     mHover = true;
     update();
 
 }
 
-void TagWidget::leaveEvent(QEvent *event)
+void TagItem::leaveEvent(QEvent *event)
 {
     mHover = false;
     update();

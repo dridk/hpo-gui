@@ -2,8 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "HpoModel.h"
-#include "GeneModel.h"
+#include "hpomodel.h"
+#include "genemodel.h"
 
 namespace Ui {
 class MainWindow;
