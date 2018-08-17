@@ -11,6 +11,10 @@ public:
     explicit TagItem(const QString& word, QWidget *parent = nullptr);
 
 
+Q_SIGNALS:
+    void closed();
+
+
 protected:
     void paintEvent(QPaintEvent * event) override;
     QSize sizeHint() const override;

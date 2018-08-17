@@ -3,7 +3,7 @@
 
 #include "flowlayout.h"
 #include <QtWidgets>
-#include "tagitem.h"
+#include "tagedit.h"
 #include "qfonticon/qfonticon.h"
 
 int main(int argc, char *argv[])
@@ -15,18 +15,17 @@ int main(int argc, char *argv[])
 
     QFontIcon::addFont(":/materialdesignicons-webfont.ttf");
 
-    QWidget * w = new QWidget;
-    FlowLayout * l = new FlowLayout;
 
-    w->setStyleSheet("background-color:white;");
 
-    l->addWidget(new TagItem("HPO:424242"));
+    TagEdit * edit = new TagEdit;
 
-    l->addWidget(new TagItem("salut"));
+    edit->addTag("sacha");
+    edit->addTag("sacha");
+    edit->addTag("sacha");
+    edit->addTag("sacha");
 
-    w->setLayout(l);
 
-    w->show();
+    edit->show();
 
 
     return a.exec();

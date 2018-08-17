@@ -68,7 +68,7 @@ void TagItem::mouseMoveEvent(QMouseEvent *event)
 void TagItem::mousePressEvent(QMouseEvent *event)
 {
     if (event->pos().x() > rect().width() - 20 )
-        qDebug()<<"close";
+       emit closed();
 
 
     QWidget::mousePressEvent(event);
