@@ -5,9 +5,7 @@
 #include "hpomodel.h"
 #include "genemodel.h"
 
-namespace Ui {
-class MainWindow;
-}
+#include "hpotreewidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -18,10 +16,9 @@ public:
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
 
-    HpoModel * mModel;
-    GeneModel * mGeneModel;
+    HpoTreeWidget * mHpoTreeWidget;
+
 };
 
 #endif // MAINWINDOW_H

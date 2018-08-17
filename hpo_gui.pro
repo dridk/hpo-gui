@@ -32,7 +32,8 @@ SOURCES += \
     node.cpp \
     mainwindow.cpp \
     hpomodel.cpp \
-    genemodel.cpp
+    genemodel.cpp \
+    hpotreewidget.cpp
 
 HEADERS += \
     flowlayout.h \
@@ -41,10 +42,10 @@ HEADERS += \
     node.h \
     mainwindow.h \
     hpomodel.h \
-    genemodel.h
+    genemodel.h \
+    hpotreewidget.h
 
-FORMS += \
-        MainWindow.ui
+FORMS +=
 
 RESOURCES += \
     gfx.qrc

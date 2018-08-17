@@ -2,7 +2,7 @@
 #define NODE_H
 #include <QtCore>
 #include <QtSql>
-
+#include "qfonticon.h"
 
 /*! \class Node
  *
@@ -71,6 +71,9 @@ public:
     void setNodeId(int nodeId);
 
 
+    QList<Node*> allParents() const;
+
+
     int nodeId() const;
     int left() const;
     int right() const;
@@ -90,7 +93,7 @@ public:
      * \brief hasChildren
      * \return true if it's possible to fetch children
      */
-    bool hasChildren();
+    bool hasChildren() const;
 
 
     /*!
@@ -98,14 +101,23 @@ public:
      * \param term
      * \return sql id from hpo term
      */
-    quint32 idFromTerm(const QString& term);
+    static quint32 idFromTerm(const QString& term);
 
-    static QList<Node*> createNode(const QString& term);
+    static QList<Node*> findNode(const QString& term);
+
+    static Node * fromTerm(const QString& term);
 
 
+
+    QIcon icon() const;
+
+
+
+    int termId() const;
 
 private:
     int mNodeId = -1;
+    int mTermId = -1;
     QString mName;
     QString mTerm;
     int mLeft = -1;

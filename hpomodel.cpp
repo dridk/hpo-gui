@@ -65,17 +65,36 @@ QVariant HpoModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DisplayRole)
     {
 
+
         if (index.column() == 0)
+            return node->name();
+
+        if (index.column() == 1)
             return node->hpo();
 
 
+    }
+
+    if (role == Qt::DecorationRole)
+    {
+        if (index.column() == 0)
+            return node->icon();
+    }
+
+
+    if ( role == Qt::TextAlignmentRole)
+    {
+        if (index.column() == 0)
+            return Qt::AlignLeft;
+
         if (index.column() == 1)
-            return node->name();
+            return Qt::AlignCenter;
+
 
     }
 
-//    if (role == Qt::CheckStateRole && index.column() == 0)
-//        return Qt::Unchecked;
+    //    if (role == Qt::CheckStateRole && index.column() == 0)
+    //        return Qt::Unchecked;
 
 
     return QVariant();
@@ -95,7 +114,7 @@ void HpoModel::setDatabase(const QString &database)
 
 
 
-    load();
+    //load();
 
 
 
@@ -156,7 +175,25 @@ Node *HpoModel::nodeFromIndex(const QModelIndex &index) const
     return static_cast<Node*>(index.internalPointer());
 }
 
-void HpoModel::load(const QString &search)
+Node *HpoModel::rootNode() const
+{
+    return mRootNode;
+}
+
+void HpoModel::setRoot(Node *node)
+{
+    beginResetModel();
+    if (mRootNode)
+        delete mRootNode;
+
+    mRootNode = node;
+    mRootNode->loadChild();
+
+
+    endResetModel();
+}
+
+void HpoModel::search(const QString &search)
 {
 
     beginResetModel();
@@ -164,16 +201,15 @@ void HpoModel::load(const QString &search)
     if (mRootNode)
         delete mRootNode;
 
-    mRootNode = new Node();
-
-
     // load All
     if (search.isEmpty())
-        mRootNode->addChild(new Node(1));
+        setRoot(new Node());
+
 
     // load only with search terms
     else {
-        for (Node * node : Node::createNode(search))
+        mRootNode = new Node();
+        for (Node * node : Node::findNode(search))
             mRootNode->addChild(node);
     }
 

@@ -79,13 +79,15 @@ void Node::setNodeId(int nodeId)
     if (mNodeId == -1)
         return;
 
-    QString q = QString("SELECT nodes.id, nodes.left, nodes.right, nodes.depth, terms.name, terms.hpo FROM nodes, terms WHERE nodes.term_id = terms.id AND nodes.id = %1").arg(nodeId);
+    QString q = QString("SELECT nodes.id as 'node_id', terms.id as 'term_id', nodes.left, nodes.right, nodes.depth, terms.name, terms.hpo FROM nodes, terms WHERE nodes.term_id = terms.id AND nodes.id = %1").arg(nodeId);
     QSqlQuery query(q);
 
     if (query.next())
     {
         mName   = query.record().value("name").toString();
-        mNodeId = query.record().value("id").toInt();
+        mNodeId = query.record().value("node_id").toInt();
+        mTermId = query.record().value("term_id").toInt();
+
         mHpo    = query.record().value("hpo").toString();
         mDepth  = query.record().value("depth").toInt();
 
@@ -110,6 +112,26 @@ void Node::setNodeId(int nodeId)
 
 }
 
+QList<Node *> Node:: allParents() const
+{
+
+    QList<Node *> nodes;
+    QString q = QString("SELECT parent_id FROM nodes WHERE term_id = %1").arg(termId());
+    QSqlQuery query(q);
+
+        while (query.next())
+        {
+            int id = query.record().value(0).toInt();
+            Node * node = new Node(id);
+            nodes.append(node);
+        }
+
+    qDebug()<<query.lastError().text();
+    qDebug()<<query.lastQuery();
+
+    return nodes;
+}
+
 QString Node::name() const
 {
     return mName;
@@ -125,7 +147,7 @@ void Node::loadChild()
 {
 
     mChilds.clear();
-    QString q = QString("SELECT nodes.id FROM nodes WHERE nodes.left > %1 AND nodes.right < %2 AND depth == %3").arg(mLeft).arg(mRight).arg(mDepth+1);
+    QString q = QString("SELECT nodes.id FROM nodes WHERE nodes.left > %1 AND nodes.right < %2 AND depth == %3 ORDER BY (nodes.right - nodes.left) DESC").arg(mLeft).arg(mRight).arg(mDepth+1);
 
     QSqlQuery query(q);
 
@@ -138,7 +160,7 @@ void Node::loadChild()
 
 }
 
-bool Node::hasChildren()
+bool Node::hasChildren() const
 {
     if (mNodeId == -1)
         return true;
@@ -162,26 +184,52 @@ quint32 Node::idFromTerm(const QString &term)
 
 }
 
-QList<Node *> Node::createNode(const QString &term)
+QList<Node *> Node::findNode(const QString &term)
 {
 
-QList<Node *> nodes;
-QString q = QString("SELECT nodes.id FROM terms, nodes WHERE terms.name LIKE '%%1%' AND nodes.term_id = terms.id").arg(term);
-QSqlQuery query(q);
+    QList<Node *> nodes;
+    QString q = QString("SELECT nodes.id FROM terms, nodes WHERE terms.name LIKE '%%1%' AND nodes.term_id = terms.id GROUP BY terms.id ORDER BY (nodes.right - nodes.left) DESC").arg(term);
+    QSqlQuery query(q);
 
-while (query.next())
-{
-    int id = query.record().value(0).toInt();
-    qDebug()<<id;
-    Node * node = new Node(id);
-    nodes.append(node);
+    while (query.next())
+    {
+        int id = query.record().value(0).toInt();
+        qDebug()<<id;
+        Node * node = new Node(id);
+        nodes.append(node);
+    }
+
+    qDebug()<<query.lastError().text();
+    qDebug()<<query.lastQuery();
+
+    return nodes;
+
 }
 
-qDebug()<<query.lastError().text();
-qDebug()<<query.lastQuery();
+Node *Node::fromTerm(const QString &term)
+{
+    int id = idFromTerm(term);
+    if (!id)
+        return nullptr;
 
-return nodes;
+    return new Node(id);
 
+}
+
+QIcon Node::icon() const
+{
+
+    if (hasChildren())
+        return FIcon(0xf256);
+    else
+        return FIcon(0xf4f9);
+
+
+}
+
+int Node::termId() const
+{
+    return mTermId;
 }
 
 QString Node::hpo() const

@@ -34,8 +34,12 @@ public:
     Node * nodeFromIndex(const QModelIndex& index) const;
 
 
+    Node * rootNode() const;
+
+    void setRoot(Node * node);
+
 public Q_SLOTS:
-    void load(const QString& search = QString());
+    void search(const QString& search = QString());
 
 
 private:
